@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Butterfly Apps</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #111118;
+      --bg-card: #16161f;
+      --bg-card-hover: #1e1e2a;
+      --accent: #7c5cfc;
+      --accent-light: #9b7eff;
+      --accent-glow: rgba(124, 92, 252, 0.25);
+      --accent-gradient: linear-gradient(135deg, #7c5cfc 0%, #c084fc 100%);
+      --text-primary: #f0f0f8;
+      --text-secondary: #9090b0;
+      --text-muted: #5a5a7a;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-accent: rgba(124, 92, 252, 0.3);
+      --shadow-card: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 3.75rem rgba(124, 92, 252, 0.15);
+      --radius-lg: 1.5rem;
+      --radius-md: 1rem;
+      --radius-sm: 0.625rem;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f5f5ff;
+      --bg-secondary: #ebebff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f0eeff;
+      --accent: #7c5cfc;
+      --accent-light: #6b4ef0;
+      --accent-glow: rgba(124, 92, 252, 0.15);
+      --text-primary: #0a0a1a;
+      --text-secondary: #4a4a6a;
+      --text-muted: #8888aa;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-accent: rgba(124, 92, 252, 0.25);
+      --shadow-card: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.08);
+      --shadow-glow: 0 0 3.75rem rgba(124, 92, 252, 0.08);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER / NAV ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(1.25rem);
+      -webkit-backdrop-filter: blur(1.25rem);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="light"] header {
+      background: rgba(245, 245, 255, 0.85);
+    }
+
+    nav {
+      max-width: 75rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4.25rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      text-decoration: none;
+    }
+
+    .nav-brand-icon {
+      width: 2.125rem;
+      height: 2.125rem;
+      background: var(--accent-gradient);
+      border-radius: 0.625rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-brand-icon svg {
+      width: 1.125rem;
+      height: 1.125rem;
+      fill: white;
+    }
+
+    .nav-brand-text {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01875rem;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.375rem 0.875rem;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: var(--border);
+    }
+
+    .theme-toggle {
+      width: 2.375rem;
+      height: 2.375rem;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: scale(1.05);
+    }
+
+    .theme-toggle svg {
+      width: 1.0625rem;
+      height: 1.0625rem;
+      fill: var(--text-secondary);
+      transition: fill 0.2s;
+    }
+
+    .theme-toggle:hover svg {
+      fill: var(--accent-light);
+    }
+
+    /* ─── HAMBURGER MENU ─── */
+    .hamburger {
+      display: none;
+      width: 2.375rem;
+      height: 2.375rem;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.3125rem;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .hamburger:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+    }
+
+    .hamburger span {
+      display: block;
+      width: 1rem;
+      height: 2px;
+      background: var(--text-secondary);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s, width 0.3s;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(0.4375rem) rotate(45deg);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      width: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-0.4375rem) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 1px);
+      left: 0;
+      right: 0;
+      background: rgba(10, 10, 15, 0.97);
+      backdrop-filter: blur(1.25rem);
+      -webkit-backdrop-filter: blur(1.25rem);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 5% 1rem;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    [data-theme="light"] .mobile-menu {
+      background: rgba(245, 245, 255, 0.97);
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--text-primary);
+      background: var(--border);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 6.25rem 5% 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 75rem;
+      margin: 0 auto;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -9.375rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 43.75rem;
+      height: 43.75rem;
+      background: radial-gradient(circle, rgba(124, 92, 252, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4375rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      padding: 0.375rem 1rem;
+      border-radius: 6.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--accent-light);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-badge span {
+      width: 0.375rem;
+      height: 0.375rem;
+      background: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.375rem, 6vw, 4.25rem);
+      font-weight: 900;
+      letter-spacing: -0.125rem;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero h1 .gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.1875rem);
+      color: var(--text-secondary);
+      max-width: 35rem;
+      margin: 0 auto 2.5rem;
+      line-height: 1.65;
+      font-weight: 400;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.0625rem;
+    }
+
+    .stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 0.125rem;
+    }
+
+    /* ─── SECTION HEADING ─── */
+    .section-heading {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.09375rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.75rem, 4vw, 2.625rem);
+      font-weight: 800;
+      letter-spacing: -0.0625rem;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-heading p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 31.25rem;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── APPS SECTION ─── */
+    .apps-section {
+      padding: 5rem 5% 6.25rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .apps-section-inner {
+      max-width: 75rem;
+      margin: 0 auto;
+    }
+
+    /* hero da aynı container */
+    .hero-inner {
+      max-width: 75rem;
+      margin: 0 auto;
+    }
+
+    /* ─── APP CARD ─── */
+    .app-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 5rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      box-shadow: var(--shadow-card);
+    }
+
+    .app-card:hover {
+      border-color: var(--border-accent);
+      box-shadow: var(--shadow-card), var(--shadow-glow);
+    }
+
+    /* Card Top Bar */
+    .app-card-header {
+      padding: 2.25rem 3rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .app-logo {
+      width: 4.75rem;
+      height: 4.75rem;
+      border-radius: 1.25rem;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .app-logo-placeholder {
+      width: 4.75rem;
+      height: 4.75rem;
+      border-radius: 1.25rem;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.75rem;
+    }
+
+    .app-meta {
+      flex: 1;
+    }
+
+    .app-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.0625rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.375rem;
+    }
+
+    .app-name {
+      font-size: 1.625rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.03125rem;
+      margin-bottom: 0.375rem;
+    }
+
+    .app-tagline {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .app-store-badges {
+      display: flex;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.125rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .store-badge:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+      transform: translateY(-0.125rem);
+    }
+
+    .store-badge svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* Card Body */
+    .app-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 0;
+    }
+
+    .app-info {
+      padding: 2.5rem 3rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .app-description {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .features-title {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.0625rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .feature-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 0.375rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feature-icon svg {
+      width: 0.625rem;
+      height: 0.625rem;
+      fill: var(--accent-light);
+    }
+
+    /* Screenshots */
+    .app-screenshots {
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .app-screenshots::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .app-screenshots::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .app-screenshots::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .screenshot {
+      height: 18.75rem;
+      width: auto;
+      border-radius: 1rem;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 0.5rem 1.875rem rgba(0,0,0,0.35);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .screenshot:hover {
+      transform: translateY(-0.375rem) scale(1.02);
+      box-shadow: 0 1rem 3.125rem rgba(0,0,0,0.45);
+    }
+
+    /* ─── COMING SOON CARD ─── */
+    .coming-soon-card {
+      background: var(--bg-card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 3.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: 5rem;
+      opacity: 0.6;
+    }
+
+    .coming-soon-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .coming-soon-icon svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: var(--text-muted);
+    }
+
+    .coming-soon-card h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 0.375rem;
+    }
+
+    .coming-soon-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 5%;
+      background: var(--bg-secondary);
+    }
+
+    .footer-inner {
+      max-width: 75rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .footer-copy {
+      max-width: 75rem;
+      margin: 1.5rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .footer-brand-icon {
+      width: 1.875rem;
+      height: 1.875rem;
+      background: var(--accent-gradient);
+      border-radius: 0.5625rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-brand-icon svg {
+      width: 0.9375rem;
+      height: 0.9375rem;
+      fill: white;
+    }
+
+    .footer-company {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .footer-company strong {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.125rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 0.5rem 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-light);
+    }
+
+    .footer-links-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .footer-links-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .footer-links-row-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.375rem;
+    }
+
+    .footer-links-row-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+    }
+
+    .footer-links-row-items a {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.75rem;
+      border-radius: 6.25rem;
+      white-space: nowrap;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+    }
+
+    .footer-links-row-items a:hover {
+      color: var(--accent-light);
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+    }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-height: 88vh;
+      max-width: 90vw;
+      border-radius: 1rem;
+      object-fit: contain;
+      box-shadow: 0 1.25rem 5rem rgba(0,0,0,0.6);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      font-size: 1.625rem;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .app-card-body {
+        grid-template-columns: 1fr;
+      }
+
+      .app-info {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 2rem 1.75rem;
+      }
+
+      .app-card-header {
+        padding: 1.5rem 1.75rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .app-screenshots {
+        padding: 1.5rem 1.75rem;
+      }
+
+      .screenshot {
+        height: 13.75rem;
+      }
+
+      .hero-stats {
+        gap: 1.75rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        height: 3.75rem;
+      }
+
+      .nav-link {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      header {
+        position: sticky;
+      }
+
+      .app-store-badges {
+        width: 100%;
+      }
+
+      .store-badge {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+      }
+
+      .footer-links-group {
+        width: 100%;
+      }
+
+      .coming-soon-card {
+        padding: 2.5rem 1.5rem;
+      }
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(1.5rem);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <a href="#" class="nav-brand">
+        <img src="assets/logo.png" alt="Butterfly Apps" style="width:2.125rem;height:2.125rem;border-radius:0.625rem;object-fit:cover;" />
+        <span class="nav-brand-text">Butterfly Apps</span>
+      </a>
+      <div class="nav-right">
+        <a href="#apps" class="nav-link">Apps</a>
+        <a href="mailto:support@butterfly-apps.xyz" class="nav-link">Contact</a>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+          <svg id="theme-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#apps" onclick="closeMenu()">Apps</a>
+      <a href="mailto:support@butterfly-apps.xyz" onclick="closeMenu()">Contact</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+    <div class="hero-badge">
+      <span></span>
+      Available on App Store & Google Play
+    </div>
+    <h1>Apps that make your<br><span class="gradient-text">life easier</span></h1>
+    <p>Simple, powerful and beautifully designed mobile apps crafted by Butterfly Apps.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">4+</div>
+        <div class="stat-label">Published Apps</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">iOS & Android</div>
+        <div class="stat-label">Platforms</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Free to Use</div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- APPS -->
+  <section class="apps-section" id="apps">
+  <div class="apps-section-inner">
+
+    <div class="section-heading reveal">
+      <div class="section-tag">Our Apps</div>
+      <h2>All Applications</h2>
+      <p>Explore our collection of apps designed to boost your productivity and creativity.</p>
+    </div>
+
+    <!-- ── APP 1: PHOTO SPLIT ── -->
+    <div class="app-card reveal" id="photo-split">
+
+      <div class="app-card-header">
+        <img src="assets/photo-split/logo-circle.png" alt="Photo Split Logo" class="app-logo" />
+        <div class="app-meta">
+          <div class="app-category">Photo & Video</div>
+          <div class="app-name">Photo Split</div>
+          <div class="app-tagline">Panorama Crop, Giant Grid, Grid Maker</div>
+        </div>
+        <div class="app-store-badges">
+          <a href="#" class="store-badge" style="opacity:0.45; pointer-events:none; cursor:not-allowed;" title="Coming soon to App Store">
+            <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            App Store <span style="font-size:11px; font-weight:400; opacity:0.8;">(Coming Soon)</span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=b.photo.split" class="store-badge" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M3.18 23.76c.35.19.74.24 1.12.14l12.4-7.16-2.63-2.63-10.89 9.65zm-1.1-19.9c-.06.22-.08.46-.08.7v18.88c0 .24.02.48.08.7l.1.1L13.5 12v-.28L2.18 3.66l-.1.2zm14.4 13.67L13 14.15v-.32l3.48-3.38.12.07 4.12 2.34c1.18.67 1.18 1.76 0 2.43l-4.24 2.44zM4.3.1C3.92 0 3.53.05 3.18.24l.1.1L14.62 11.7 12 9.07 4.3.1z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+
+      <div class="app-card-body">
+
+        <div class="app-info">
+          <p class="app-description">
+            Photo Split is a free application that lets you easily split any picture into 1×2, 1×3, 1×4, 1×5, ..., 5×5 grid without losing high resolution quality and download them to your phone.
+          </p>
+
+          <div class="features-title">Features</div>
+          <ul class="features-list">
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              Split photos without any quality loss
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              Grid formats from 1×2 all the way up to 5×5
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              Save split images directly to your camera roll
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              Create eye-catching multi-post content for social media
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              Dark mode support
+            </li>
+          </ul>
+        </div>
+
+        <div class="app-screenshots">
+          <img src="assets/photo-split/presentation-1.png" alt="Photo Split Screenshot 1" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/photo-split/presentation-2.png" alt="Photo Split Screenshot 2" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/photo-split/presentation-3.png" alt="Photo Split Screenshot 3" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/photo-split/presentation-4.png" alt="Photo Split Screenshot 4" class="screenshot" onclick="openLightbox(this)" />
+        </div>
+
+      </div>
+    </div>
+    <!-- END PHOTO SPLIT -->
+
+    <!-- ── APP 2: CREATE & DESIGN QR ── -->
+    <div class="app-card reveal" id="qr-generator">
+
+      <div class="app-card-header">
+        <img src="assets/qr-generator/logo-rounded.png" alt="Create & Design QR Logo" class="app-logo" />
+        <div class="app-meta">
+          <div class="app-category">Utilities & Productivity</div>
+          <div class="app-name">Create & Design QR</div>
+          <div class="app-tagline">Create and design QR codes for social media, WiFi, location, phone and email</div>
+        </div>
+        <div class="app-store-badges">
+          <a href="#" class="store-badge" style="opacity:0.45; pointer-events:none; cursor:not-allowed;" title="Coming soon to App Store">
+            <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            App Store <span style="font-size:11px; font-weight:400; opacity:0.8;">(Coming Soon)</span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=b.qr.generator" class="store-badge" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M3.18 23.76c.35.19.74.24 1.12.14l12.4-7.16-2.63-2.63-10.89 9.65zm-1.1-19.9c-.06.22-.08.46-.08.7v18.88c0 .24.02.48.08.7l.1.1L13.5 12v-.28L2.18 3.66l-.1.2zm14.4 13.67L13 14.15v-.32l3.48-3.38.12.07 4.12 2.34c1.18.67 1.18 1.76 0 2.43l-4.24 2.44zM4.3.1C3.92 0 3.53.05 3.18.24l.1.1L14.62 11.7 12 9.07 4.3.1z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+
+      <div class="app-card-body">
+
+        <div class="app-info">
+          <p class="app-description">
+            Create &amp; Design QR brings all your QR code needs into one simple app. With an easy-to-use interface and powerful customization options, you can create both personal and professional QR codes in seconds.
+          </p>
+
+          <div class="features-title">Features</div>
+          <ul class="features-list">
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              📱 Social media QR codes — Instagram, YouTube, Facebook & more
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              📶 WiFi QR codes — instant connection without typing passwords
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              📍 Location, phone, email, link & contact info QR codes
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🎨 Design & customize with colors and style options
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🚀 Fast, user-friendly interface with easy saving & sharing
+            </li>
+          </ul>
+        </div>
+
+        <div class="app-screenshots">
+          <img src="assets/qr-generator/presentation-1.png" alt="Create & Design QR Screenshot 1" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/qr-generator/presentation-2.png" alt="Create & Design QR Screenshot 2" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/qr-generator/presentation-3.png" alt="Create & Design QR Screenshot 3" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/qr-generator/presentation-4.png" alt="Create & Design QR Screenshot 4" class="screenshot" onclick="openLightbox(this)" />
+        </div>
+
+      </div>
+    </div>
+    <!-- END CREATE & DESIGN QR -->
+
+    <!-- ── APP 3: RANDOM PICKER ── -->
+    <div class="app-card reveal" id="select-random">
+
+      <div class="app-card-header">
+        <img src="assets/select-random/logo-circle.png" alt="Random Picker Logo" class="app-logo" />
+        <div class="app-meta">
+          <div class="app-category">Utilities & Entertainment</div>
+          <div class="app-name">Random Picker – Wheel &amp; Dice</div>
+          <div class="app-tagline">Spin the wheel, roll the dice, generate numbers or passwords</div>
+        </div>
+        <div class="app-store-badges">
+          <a href="#" class="store-badge" style="opacity:0.45; pointer-events:none; cursor:not-allowed;" title="Coming soon to App Store">
+            <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            App Store <span style="font-size:11px; font-weight:400; opacity:0.8;">(Coming Soon)</span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=b.select.random" class="store-badge" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M3.18 23.76c.35.19.74.24 1.12.14l12.4-7.16-2.63-2.63-10.89 9.65zm-1.1-19.9c-.06.22-.08.46-.08.7v18.88c0 .24.02.48.08.7l.1.1L13.5 12v-.28L2.18 3.66l-.1.2zm14.4 13.67L13 14.15v-.32l3.48-3.38.12.07 4.12 2.34c1.18.67 1.18 1.76 0 2.43l-4.24 2.44zM4.3.1C3.92 0 3.53.05 3.18.24l.1.1L14.62 11.7 12 9.07 4.3.1z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+
+      <div class="app-card-body">
+
+        <div class="app-info">
+          <p class="app-description">
+            Random Picker makes decision-making simple, fast, and fun. Generate random results instantly with powerful and easy-to-use tools — from spinning a wheel to rolling dice, generating numbers, or creating secure passwords.
+          </p>
+
+          <div class="features-title">Features</div>
+          <ul class="features-list">
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🎡 Wheel Picker — add names or options, spin and get your result
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🎲 Dice Roller — roll a classic dice for quick, fair decisions
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🔢 Random Number Generator — set your range, generate instantly
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🔐 Password Generator — create strong and secure passwords
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🎨 Modern, colorful design with smooth performance
+            </li>
+          </ul>
+        </div>
+
+        <div class="app-screenshots">
+          <img src="assets/select-random/presentation-1.png" alt="Random Picker Screenshot 1" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/select-random/presentation-2.png" alt="Random Picker Screenshot 2" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/select-random/presentation-3.png" alt="Random Picker Screenshot 3" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/select-random/presentation-4.png" alt="Random Picker Screenshot 4" class="screenshot" onclick="openLightbox(this)" />
+        </div>
+
+      </div>
+    </div>
+    <!-- END RANDOM PICKER -->
+
+    <!-- ── APP 4: QR WIFI ── -->
+    <div class="app-card reveal" id="qr-wifi">
+
+      <div class="app-card-header">
+        <img src="assets/qr/logo-circle.png" alt="QR WiFi Logo" class="app-logo" />
+        <div class="app-meta">
+          <div class="app-category">Utilities & Networking</div>
+          <div class="app-name">QR WiFi</div>
+          <div class="app-tagline">Scan &amp; Generate QR Codes Quickly and Easily</div>
+        </div>
+        <div class="app-store-badges">
+          <a href="#" class="store-badge" style="opacity:0.45; pointer-events:none; cursor:not-allowed;" title="Coming soon to App Store">
+            <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            App Store <span style="font-size:11px; font-weight:400; opacity:0.8;">(Coming Soon)</span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=b.qr.code" class="store-badge" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M3.18 23.76c.35.19.74.24 1.12.14l12.4-7.16-2.63-2.63-10.89 9.65zm-1.1-19.9c-.06.22-.08.46-.08.7v18.88c0 .24.02.48.08.7l.1.1L13.5 12v-.28L2.18 3.66l-.1.2zm14.4 13.67L13 14.15v-.32l3.48-3.38.12.07 4.12 2.34c1.18.67 1.18 1.76 0 2.43l-4.24 2.44zM4.3.1C3.92 0 3.53.05 3.18.24l.1.1L14.62 11.7 12 9.07 4.3.1z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+
+      <div class="app-card-body">
+
+        <div class="app-info">
+          <p class="app-description">
+            The perfect solution for quick and user-friendly WiFi connection! Connect to WiFi networks instantly by scanning a QR code — no more dealing with long, complex passwords. Generate customizable QR codes for your own networks and share them with guests or devices in seconds.
+          </p>
+
+          <div class="features-title">Features</div>
+          <ul class="features-list">
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              📶 Instant WiFi connection by scanning a QR code
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              🎨 Customizable QR code colors and styles
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              ⚡ Generate WiFi QR codes in seconds
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              📷 Scan any QR code for seamless connection
+            </li>
+            <li>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              📸 Generate QR codes for Instagram and social media
+            </li>
+          </ul>
+        </div>
+
+        <div class="app-screenshots">
+          <img src="assets/qr/presentation-1.png" alt="QR WiFi Screenshot 1" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/qr/presentation-2.png" alt="QR WiFi Screenshot 2" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/qr/presentation-3.png" alt="QR WiFi Screenshot 3" class="screenshot" onclick="openLightbox(this)" />
+          <img src="assets/qr/presentation-4.png" alt="QR WiFi Screenshot 4" class="screenshot" onclick="openLightbox(this)" />
+        </div>
+
+      </div>
+    </div>
+    <!-- END QR WIFI -->
+
+    <!-- ── COMING SOON APPS ── -->
+    <div class="coming-soon-card reveal">
+      <div class="coming-soon-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      </div>
+      <h3>More Apps Coming Soon</h3>
+      <p>We're working on new apps. Stay tuned!</p>
+    </div>
+
+  </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="Butterfly Apps" style="width:1.875rem;height:1.875rem;border-radius:0.5625rem;object-fit:cover;" />
+        <div class="footer-company">
+          <strong>Butterfly Apps</strong>
+          Butterfly Bilişim ve Teknoloji Limited Şirketi
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-links-row">
+          <div class="footer-links-row-label">Privacy Policy</div>
+          <div class="footer-links-row-items">
+            <a href="photo-split/privacy-policy.html">Photo Split</a>
+            <a href="qr-generator/privacy-policy.html">Create &amp; Design QR</a>
+            <a href="select-random/privacy-policy.html">Random Picker</a>
+            <a href="qr-code/privacy-policy.html">QR WiFi</a>
+          </div>
+        </div>
+        <div class="footer-links-row">
+          <div class="footer-links-row-label">Terms &amp; Conditions</div>
+          <div class="footer-links-row-items">
+            <a href="photo-split/terms-and-conditions.html">Photo Split</a>
+            <a href="qr-generator/terms-and-conditions.html">Create &amp; Design QR</a>
+            <a href="select-random/terms-and-conditions.html">Random Picker</a>
+            <a href="qr-code/terms-and-conditions.html">QR WiFi</a>
+          </div>
+        </div>
+        <div class="footer-links-row">
+          <div class="footer-links-row-items">
+            <a href="mailto:support@butterfly-apps.xyz">✉ support@butterfly-apps.xyz</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copy">
+      © 2026 Butterfly Bilişim ve Teknoloji Limited Şirketi. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // ── THEME ──
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+
+    const moonPath = "M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z";
+    const sunPath  = "M12 7a5 5 0 100 10A5 5 0 0012 7zm0-5v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42";
+
+    function setTheme(theme) {
+      body.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      const path = icon.querySelector('path') || icon;
+      if (theme === 'light') {
+        icon.innerHTML = `<path d="${sunPath}"/>`;
+      } else {
+        icon.innerHTML = `<path d="${moonPath}"/>`;
+      }
+    }
+
+    function toggleTheme() {
+      const current = body.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Load saved theme
+    const saved = localStorage.getItem('theme') || 'dark';
+    setTheme(saved);
+
+    // ── HAMBURGER MENU ──
+    function toggleMenu() {
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobileMenu');
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    }
+
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+      const header = document.querySelector('header');
+      if (!header.contains(e.target)) closeMenu();
+    });
+
+    // ── LIGHTBOX ──
+    function openLightbox(img) {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // ── SCROLL REVEAL ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
